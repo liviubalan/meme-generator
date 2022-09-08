@@ -1,3 +1,4 @@
+from PIL import Image, ImageDraw, ImageFont
 from abc import ABC, abstractmethod
 from typing import List
 import docx
@@ -140,4 +141,17 @@ class MemeEngine():
         self.output_path = output_path
 
     def make_meme(self, img_path, text, author, width=500) -> str:
-        pass
+        image = Image.open(img_path)
+
+        font = ImageFont.truetype("./_data/fonts/LilitaOne-Regular.ttf", 20)
+        draw = ImageDraw.Draw(image)
+        draw.text((10, 10), text, (0, 0, 0), font=font)
+
+        font = ImageFont.truetype("./_data/fonts/LilitaOne-Regular.ttf", 16)
+        draw = ImageDraw.Draw(image)
+        draw.text((30, 40), '- ' + author, (0, 0, 0), font=font)
+
+        output_path = self.output_path + '/' + img_path.split('/')[-1]
+        image.save(output_path)
+
+        return output_path

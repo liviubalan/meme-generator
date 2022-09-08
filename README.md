@@ -4,8 +4,11 @@
 
 Packages:
 ```console
-pip install flask
 sudo apt-get install -y xpdf
+pip install flask
+pip install python-docx
+pip install pandas
+pip install Pillow
 ```
 
 ## Run
