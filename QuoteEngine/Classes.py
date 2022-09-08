@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 from abc import ABC, abstractmethod
 from typing import List
+from QuoteEngine.ExceptionClasses import InvalidFileException, InvalidTextInput
 import docx
 import os
 import pandas
@@ -137,7 +138,7 @@ class Ingestor(IngestorInterface):
     @classmethod
     def parse(cls, path: str) -> List[QuoteModel]:
         if not cls.can_ingest(path):
-            raise IOError(f"{path} cannot be ingested.")
+            raise InvalidFileException(f"{path} cannot be ingested.")
         return cls.ingestors_map[cls.extension(path)].parse(path)
 
 
@@ -146,10 +147,16 @@ class MemeEngine():
         self.output_path = output_path
 
     def make_meme(self, img_path, text, author, width=500) -> str:
+        if len(text) > 50:
+            raise InvalidTextInput("Text length should be max 50.")
+
+        if len(author) > 20:
+            raise InvalidTextInput("Author length should be max 20.")
+
         file = img_path.split('/')[-1]
         extension = file.split('.')[-1]
         if extension not in ['gif', 'jpg', 'png']:
-            raise TypeError(f"File {img_path} is not a valid image.")
+            raise InvalidFileException(f"File {img_path} not valid image.")
         image = Image.open(img_path)
 
         font = ImageFont.truetype("./_data/fonts/LilitaOne-Regular.ttf", 20)
