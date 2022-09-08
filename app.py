@@ -49,15 +49,16 @@ def meme_form():
 @app.route('/create', methods=['POST'])
 def meme_post():
     """ Create a user defined meme """
+    data = request.form
+    url = data['image_url']
+    extension = Ingestor.extension(url)
+    tmp_file_name = f"./_data/photos/generated_meme.{extension}"
+    tmp_file = open(tmp_file_name, 'wb')
+    req = requests.get(url)
+    tmp_file.write(req.content)
 
-    # @TODO:
-    # 1. Use requests to save the image from the image_url
-    #    form param to a temp local file.
-    # 2. Use the meme object to generate a meme using this temp
-    #    file and the body and author form paramaters.
-    # 3. Remove the temporary saved image.
-
-    path = None
+    path = meme.make_meme(tmp_file_name, data['body'], data['author'])
+    os.remove(tmp_file_name)
 
     return render_template('meme.html', path=path)
 

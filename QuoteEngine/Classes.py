@@ -121,20 +121,20 @@ class Ingestor(IngestorInterface):
     }
 
     @staticmethod
-    def _extension(path) -> str:
+    def extension(path) -> str:
         return path.split('.')[-1].lower()
 
     @classmethod
     def can_ingest(cls, path) -> bool:
         """Check if the path is an existent file and extension is allowed."""
-        extension = cls._extension(path)
+        extension = cls.extension(path)
         return os.path.isfile(path) and extension in cls.ingestors_map.keys()
 
     @classmethod
     def parse(cls, path: str) -> List[QuoteModel]:
         if not cls.can_ingest(path):
             raise IOError(f"{path} cannot be ingested.")
-        return cls.ingestors_map[cls._extension(path)].parse(path)
+        return cls.ingestors_map[cls.extension(path)].parse(path)
 
 
 class MemeEngine():
