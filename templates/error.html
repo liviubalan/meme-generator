@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Meme Generator{% endblock %}
+{% block body %}
+<div class="card" style="width: 500px; max-width: 100%;">
+    <div class="card-body">
+        <p>An exception occurred: {{ error }}</p>
+        <p>To generate a new meme click <a href="{{url_for('meme_rand')}}">here</a> or use the buttons below.</p>
+    </div>
+</div>
+{% endblock %}

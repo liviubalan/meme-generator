@@ -146,6 +146,10 @@ class MemeEngine():
         self.output_path = output_path
 
     def make_meme(self, img_path, text, author, width=500) -> str:
+        file = img_path.split('/')[-1]
+        extension = file.split('.')[-1]
+        if extension not in ['gif', 'jpg', 'png']:
+            raise TypeError(f"File {img_path} is not a valid image.")
         image = Image.open(img_path)
 
         font = ImageFont.truetype("./_data/fonts/LilitaOne-Regular.ttf", 20)
@@ -164,7 +168,7 @@ class MemeEngine():
             new_size = (width, image_height * width // image_width)
             image = image.resize(new_size)
 
-        output_path = self.output_path + '/' + img_path.split('/')[-1]
+        output_path = self.output_path + '/' + file
         image.save(output_path)
 
         return output_path

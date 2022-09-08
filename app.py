@@ -32,38 +32,43 @@ quotes, imgs = setup()
 @app.route('/')
 def meme_rand():
     """ Generate a random meme """
-
-    img = random.choice(imgs)
-    quote = random.choice(quotes)
-    path = meme.make_meme(img, quote.body, quote.author)
-    return render_template('meme.html', path=path)
+    try:
+        img = random.choice(imgs)
+        quote = random.choice(quotes)
+        path = meme.make_meme(img, quote.body, quote.author)
+        return render_template('meme.html', path=path)
+    except Exception as e:
+        return render_template('error.html', error=e)
 
 
 @app.route('/create', methods=['GET'])
 def meme_form():
     """ User input for meme information """
-    return render_template('meme_form.html')
+    try:
+        return render_template('meme_form.html')
+    except Exception as e:
+        return render_template('error.html', error=e)
 
 
 @app.route('/create', methods=['POST'])
 def meme_post():
     """ Create a user defined meme """
-    data = request.form
-    url = data['image_url']
-    extension = Ingestor.extension(url)
-    tmp_file_name = f"./_data/photos/generated_meme.{extension}"
-    tmp_file = open(tmp_file_name, 'wb')
-    req = requests.get(url)
-    tmp_file.write(req.content)
+    try:
+        data = request.form
+        url = data['image_url']
+        extension = Ingestor.extension(url)
+        tmp_file_name = f"./_data/photos/generated_meme.{extension}"
+        tmp_file = open(tmp_file_name, 'wb')
+        req = requests.get(url)
+        tmp_file.write(req.content)
 
-    path = meme.make_meme(tmp_file_name, data['body'], data['author'])
-    os.remove(tmp_file_name)
+        path = meme.make_meme(tmp_file_name, data['body'], data['author'])
+        os.remove(tmp_file_name)
 
-    return render_template('meme.html', path=path)
+        return render_template('meme.html', path=path)
+    except Exception as e:
+        return render_template('error.html', error=e)
 
 
 if __name__ == "__main__":
-    try:
-        app.run()
-    except Exception as e:
-        print(f"Exception encountered: {e}")
+    app.run()
