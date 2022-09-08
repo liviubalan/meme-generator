@@ -1,5 +1,9 @@
 # Meme generator
 
+## Info
+
+Web based meme generator using Python libraries.
+
 ## Setup
 
 Packages:
