@@ -5,7 +5,6 @@ import random
 import requests
 
 app = Flask(__name__)
-
 meme = MemeEngine('./static')
 
 
