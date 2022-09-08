@@ -18,6 +18,10 @@ class QuoteModel:
 
 
 class IngestorInterface(ABC):
+    @staticmethod
+    def extension(path) -> str:
+        return path.split('.')[-1].lower()
+
     @abstractmethod
     def can_ingest(cls, path) -> bool:
         pass
@@ -30,7 +34,7 @@ class IngestorInterface(ABC):
 class IngestorInterCSV(IngestorInterface):
     @classmethod
     def can_ingest(cls, path) -> bool:
-        pass
+        return cls.extension(path) == 'csv'
 
     @classmethod
     def parse(cls, path: str) -> List[QuoteModel]:
@@ -47,7 +51,7 @@ class IngestorInterCSV(IngestorInterface):
 class IngestorInterDOCX(IngestorInterface):
     @classmethod
     def can_ingest(cls, path) -> bool:
-        pass
+        return cls.extension(path) == 'docx'
 
     @classmethod
     def parse(cls, path: str) -> List[QuoteModel]:
@@ -69,7 +73,7 @@ class IngestorInterDOCX(IngestorInterface):
 class IngestorInterPDF(IngestorInterface):
     @classmethod
     def can_ingest(cls, path) -> bool:
-        pass
+        return cls.extension(path) == 'pdf'
 
     @classmethod
     def parse(cls, path: str) -> List[QuoteModel]:
@@ -93,7 +97,7 @@ class IngestorInterPDF(IngestorInterface):
 class IngestorInterTXT(IngestorInterface):
     @classmethod
     def can_ingest(cls, path) -> bool:
-        pass
+        return cls.extension(path) == 'txt'
 
     @classmethod
     def parse(cls, path: str) -> List[QuoteModel]:
@@ -120,15 +124,15 @@ class Ingestor(IngestorInterface):
         'txt': IngestorInterTXT,
     }
 
-    @staticmethod
-    def extension(path) -> str:
-        return path.split('.')[-1].lower()
-
     @classmethod
     def can_ingest(cls, path) -> bool:
         """Check if the path is an existent file and extension is allowed."""
         extension = cls.extension(path)
-        return os.path.isfile(path) and extension in cls.ingestors_map.keys()
+        return (
+            os.path.isfile(path)
+            and extension in cls.ingestors_map.keys()
+            and cls.ingestors_map[extension].can_ingest(path)
+        )
 
     @classmethod
     def parse(cls, path: str) -> List[QuoteModel]:
@@ -152,11 +156,12 @@ class MemeEngine():
 
         font = ImageFont.truetype("./_data/fonts/LilitaOne-Regular.ttf", 16)
         draw = ImageDraw.Draw(image)
-        draw.text((rand_x+20, rand_y+30), '- ' + author, "#805500", font=font)
+        coord = (rand_x + 20, rand_y + 30)
+        draw.text(coord, '- ' + author, "#805500", font=font)
 
         image_width, image_height = image.size
         if image_width > width:
-            new_size = (width, image_height*width//image_width)
+            new_size = (width, image_height * width // image_width)
             image = image.resize(new_size)
 
         output_path = self.output_path + '/' + img_path.split('/')[-1]
