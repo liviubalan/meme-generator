@@ -64,6 +64,7 @@ def meme_post():
         tmp_file = open(tmp_file_name, 'wb')
         req = requests.get(url)
         tmp_file.write(req.content)
+        tmp_file.close()
 
         path = meme.make_meme(tmp_file_name, data['body'], data['author'])
         os.remove(tmp_file_name)
