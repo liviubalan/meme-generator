@@ -4,6 +4,7 @@ from typing import List
 import docx
 import os
 import pandas
+import random
 import subprocess
 
 
@@ -145,11 +146,13 @@ class MemeEngine():
 
         font = ImageFont.truetype("./_data/fonts/LilitaOne-Regular.ttf", 20)
         draw = ImageDraw.Draw(image)
-        draw.text((10, 10), text, (0, 0, 0), font=font)
+        rand_x = random.randint(10, 50)
+        rand_y = random.randint(10, 200)
+        draw.text((rand_x, rand_y), text, '#FFF', font=font)
 
         font = ImageFont.truetype("./_data/fonts/LilitaOne-Regular.ttf", 16)
         draw = ImageDraw.Draw(image)
-        draw.text((30, 40), '- ' + author, (0, 0, 0), font=font)
+        draw.text((rand_x+20, rand_y+30), '- ' + author, "#805500", font=font)
 
         image_width, image_height = image.size
         if image_width > width:

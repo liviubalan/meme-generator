@@ -1,8 +1,8 @@
-import random
-import os
-import requests
 from flask import Flask, render_template, abort, request
 from QuoteEngine.Classes import Ingestor, MemeEngine
+import os
+import random
+import requests
 
 app = Flask(__name__)
 
