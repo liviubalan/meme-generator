@@ -27,3 +27,11 @@ source ~/anaconda3/bin/activate root
 export FLASK_APP=app.py
 flask run --host 0.0.0.0 --port 3000 --reload
 ```
+
+# CLI
+
+Usage:
+```console
+python3 meme.py
+python3 meme.py --path='./_data/photos/dog/xander_2.jpg' --body='Doggy style' --author='Snoop'
+```
