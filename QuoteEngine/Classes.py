@@ -151,6 +151,11 @@ class MemeEngine():
         draw = ImageDraw.Draw(image)
         draw.text((30, 40), '- ' + author, (0, 0, 0), font=font)
 
+        image_width, image_height = image.size
+        if image_width > width:
+            new_size = (width, image_height*width//image_width)
+            image = image.resize(new_size)
+
         output_path = self.output_path + '/' + img_path.split('/')[-1]
         image.save(output_path)
 
