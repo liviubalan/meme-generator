@@ -63,4 +63,7 @@ def meme_post():
 
 
 if __name__ == "__main__":
-    app.run()
+    try:
+        app.run()
+    except Exception as e:
+        print(f"Exception encountered: {e}")
